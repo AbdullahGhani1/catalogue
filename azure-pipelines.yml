@@ -10,10 +10,19 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
 
 - script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+    npm install 
+    mkdir publish 
+    cp -r node_modules package.json server.js publish
+  displayName: Install NodeJS Dependencies
+  
+- task: UniversalPackages@0
+  inputs:
+    command: 'publish'
+    publishDirectory: '$(Build.SourcesDirectory)/publish'
+    feedsToUsePublish: 'internal'
+    vstsFeedPublish: 'ce99914a-0f7d-4c46-9ccc-e4d025115ea9/f0174cff-2623-4600-a29f-0eb8a06b0a0c'
+    vstsFeedPackagePublish: 'catalogue'
+    versionOption: 'patch'
+    packagePublishDescription: 'RoboShop Catalogue'
